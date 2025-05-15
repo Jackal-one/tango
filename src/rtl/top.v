@@ -1,6 +1,6 @@
 module top (
     input i_clk,
-    input i_rst,
+    input i_rstn,
     input i_uart_rx,
     output o_uart_tx,
 
@@ -10,7 +10,6 @@ module top (
     output o_led_3
 );
 
-    wire i_rstn = i_rst;
     wire w_rx_vd;
     wire [7:0] w_rx_byte;
 
@@ -25,9 +24,9 @@ module top (
         .o_rx_byte(w_rx_byte)
     );
 
-    assign o_led_0 = w_rx_vd;
-    assign o_led_1 = i_rst;
-    assign o_led_2 = ~i_rstn;
-    assign o_led_3 = i_uart_rx;
+    assign o_led_0 = i_rstn;
+    assign o_led_1 = ~i_rstn;
+    assign o_led_2 = i_uart_rx;
+    assign o_led_3 = w_rx_vd;
 
 endmodule
