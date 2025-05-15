@@ -1,0 +1,95 @@
+# Build output folders
+/impl/
+/build/
+/build/*
+
+# Temporary files from editors/IDEs
+*.log
+*.jou
+*.jou.*
+*.str
+*.srp
+*.tmp
+*.bak
+*.bak2
+*.backup
+*.cache
+
+# Generated files from FPGA tools
+*.bit
+*.bin
+*.bin.*
+*.rpt
+*.rpt.*
+*.xst
+*.xpi
+*.ngc
+*.ngc.*
+*.ngd
+*.ngd.*
+*.ncd
+*.ncd.*
+*.pcf
+*.xcf
+*.syr
+*.syr.*
+*.sof
+*.sof.*
+*.jed
+*.jed.*
+*.svf
+*.svf.*
+*.vho
+*.vho.*
+*.vhd
+*.vhd.*
+*.cf
+*.cf.*
+*.asc
+*.dcp
+*.dcp.*
+*.lpf
+*.lpf.*
+
+# Gowin generated files
+*.gprj.user
+*.pcf
+*.vcd
+*.mem
+*.lpf
+*.ngc
+*.svf
+*.bin
+
+# Vivado / Xilinx
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.webtalk/
+*.Xil/
+*.Xil/
+
+# Lattice / IceStorm
+*.asc
+*.bin
+*.json
+*.txt
+*.bit
+
+# VSCode settings and workspace storage
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Python cache (if you add python scripts)
+__pycache__/
+*.py[cod]
+
+# Ignore build artifacts and temporary scripts output
+/tools/build_output/
