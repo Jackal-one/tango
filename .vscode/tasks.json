@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Simulate (make)",
+        "type": "shell",
+        "command": "make",
+        "args": ["sim"],
+        "group": "build"
+      },
+      {
+        "label": "View Waveform (make gtkwave)",
+        "type": "shell",
+        "command": "make",
+        "args": ["gtkwave"],
+        "group": "test"
+      },
+      {
+        "label": "Clean Build",
+        "type": "shell",
+        "command": "make",
+        "args": ["clean"],
+        "group": "build"
+      }
+    ]
+  }
+  
