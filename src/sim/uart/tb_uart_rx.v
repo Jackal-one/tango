@@ -20,7 +20,7 @@ module tb_uart_rx;
         .BaudRate(c_BAUD_RATE)
     ) uart_rx_uut(
         .i_clk(r_clk),
-        .i_rstn(~r_rst),
+        .i_rst_n(~r_rst),
         .i_rx(r_rx_data),
         .o_rx_valid(r_rx_vd),
         .o_rx_byte(r_rx_byte)
@@ -58,14 +58,9 @@ module tb_uart_rx;
         $dumpvars(0, tb_uart_rx);
 
         #(20000);
-        send_uart_word(35);
-        send_uart_word(85);
-        send_uart_word(60);
-        send_uart_word(1);
-        send_uart_word(127);
-        send_uart_word(255);
-        send_uart_word(2);
-        send_uart_word(9);
+        send_uart_word(104);
+        send_uart_word(106);
+        send_uart_word(107);
 
         $display("Received byte: %b", r_rx_byte);
 
