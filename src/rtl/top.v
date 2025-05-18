@@ -1,7 +1,7 @@
 module top (
-    input i_clk,
-    input i_rst,
-    input i_uart_rx,
+    input  i_clk,
+    input  i_rst,
+    input  i_uart_rx,
     output o_uart_tx,
 
     output o_led_0,
@@ -10,35 +10,50 @@ module top (
     output o_led_3
 );
 
-    wire w_rx_vd;
-    wire [7:0] w_rx_byte;
+  localparam ClkFreq = 27_000_000;
+  localparam BaudRate = 115200;
 
-    wire i_rst_n = ~i_rst;
+  wire i_rst_n = ~i_rst;
 
-    uart_rx #(
-        .ClkFreq(10_000_000),
-        .BaudRate(115200)
-    ) uart_rx_inst (
-        .i_clk(i_clk),
-        .i_rst_n(~i_rst),
-        .i_rx(i_uart_rx),
-        .o_rx_valid(w_rx_vd),
-        .o_rx_byte(w_rx_byte)
-    );
+  reg tx_enable;
+  wire tx_busy;
+  wire rx_done;
+  wire [7:0] rx_byte;
 
-    reg r_rx_recv;
+  uart_rx #(
+      .ClkFreq (ClkFreq),
+      .BaudRate(BaudRate)
+  ) uart_rx_inst (
+      .i_clk(i_clk),
+      .i_rst_n(i_rst_n),
+      .i_rx(i_uart_rx),
+      .o_rx_valid(rx_done),
+      .o_rx_byte(rx_byte)
+  );
 
-    always @(posedge i_clk or negedge i_rst_n) begin
-        if(~i_rst_n) begin
-            r_rx_recv <= 1'b0;
-        end else if(w_rx_vd) begin
-            r_rx_recv <= ~r_rx_recv;
-        end
+  uart_tx #(
+      .ClkFreq (ClkFreq),
+      .BaudRate(BaudRate)
+  ) uart_tx_inst (
+      .clk(i_clk),
+      .reset_n(i_rst_n),
+      .tx_enable(tx_enable),
+      .tx_data(rx_byte),
+      .tx(o_uart_tx),
+      .tx_busy(tx_busy)
+  );
+
+  always @(posedge i_clk or negedge i_rst_n) begin
+    if (~i_rst_n) begin
+      tx_enable <= 1'b0;
+    end else begin
+      tx_enable <= rx_done && ~tx_busy;
     end
+  end
 
-    assign o_led_0 = ~i_rst;
-    assign o_led_1 = ~w_rx_vd;
-    assign o_led_2 = i_uart_rx;
-    assign o_led_3 = ~r_rx_recv;
+  assign o_led_0 = ~i_rst_n;
+  assign o_led_1 = ~tx_busy;
+  assign o_led_2 = i_uart_rx;
+  assign o_led_3 = o_uart_tx;
 
 endmodule

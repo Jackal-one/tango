@@ -1,4 +1,5 @@
 # Build output folders
+.venv
 /impl/
 /build/
 /build/*

@@ -1,27 +1,38 @@
 {
     "version": "2.0.0",
+
+    "options": {
+      "env": {
+        "QT_QPA_PLATFORM_PLUGIN_PATH": "/usr/lib/x86_64-linux-gnu/qt5/plugins",
+        "QT_QPA_PLATFORM": "xcb",
+        "QT_XCB_GL_INTEGRATION": "none"
+      },
+   },
+
     "tasks": [
       {
-        "label": "Simulate (make)",
+        "label": "Simulate",
         "type": "shell",
         "command": "make",
         "args": ["sim"],
         "group": "build"
       },
+
       {
-        "label": "View Waveform (make gtkwave)",
+        "label": "Gowin | All",
         "type": "shell",
-        "command": "make",
-        "args": ["gtkwave"],
-        "group": "test"
-      },
-      {
-        "label": "Clean Build",
-        "type": "shell",
-        "command": "make",
-        "args": ["clean"],
-        "group": "build"
+        "group": "build",
+        "command": "gw_sh",
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "args": [
+          "${env:QT_QPA_PLATFORM_PLUGIN_PATH}",
+          "${env:QT_QPA_PLATFORM}",
+          "${env:QT_XCB_GL_INTEGRATION}",
+          "build_tn20k.tcl"
+      ]
       }
     ]
-  }
+  }   
   
