@@ -53,10 +53,6 @@ module tb_uart;
   );
 
   always #(ClockPeriod / 2) clk <= ~clk;
-  
-  initial begin
-
-  end
 
   initial begin
     $dumpfile("build/tb_uart.vcd");
