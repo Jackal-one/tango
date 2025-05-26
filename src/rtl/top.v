@@ -15,10 +15,17 @@ module top (
 
   wire i_rst_n = ~i_rst;
 
-  reg tx_enable;
+  wire [7:0] rx_byte;
+  wire [7:0] tx_byte;
+
   wire tx_busy;
   wire rx_done;
-  wire [7:0] rx_byte;
+
+  wire fifo_full;
+  wire fifo_empty;
+
+  reg tx_enable;
+  reg fifo_read_en;
 
   uart_rx #(
       .ClkFreq (ClkFreq),
@@ -38,21 +45,37 @@ module top (
       .clk(i_clk),
       .reset_n(i_rst_n),
       .tx_enable(tx_enable),
-      .tx_data(rx_byte),
+      .tx_data(tx_byte),
       .tx(o_uart_tx),
       .tx_busy(tx_busy)
+  );
+
+  fifo #(
+      .Depth(4),
+      .Width(8)
+  ) fifo_inst (
+      .i_clk(i_clk),
+      .i_rst_n(i_rst_n),
+      .i_wr(rx_done),
+      .i_rd(fifo_read_en),
+      .i_data(rx_byte),
+      .o_data(tx_byte),
+      .o_full(fifo_full),
+      .o_empty(fifo_empty)
   );
 
   always @(posedge i_clk or negedge i_rst_n) begin
     if (~i_rst_n) begin
       tx_enable <= 1'b0;
+      fifo_read_en <= 1'b0;
     end else begin
-      tx_enable <= rx_done && ~tx_busy;
+      tx_enable <= fifo_read_en;
+      fifo_read_en <= ~fifo_empty && ~tx_busy;
     end
   end
 
   assign o_led_0 = ~i_rst_n;
-  assign o_led_1 = ~tx_busy;
+  assign o_led_1 = fifo_empty;
   assign o_led_2 = i_uart_rx;
   assign o_led_3 = o_uart_tx;
 
