@@ -8,6 +8,9 @@ module tb_video;
   reg rstn = 1'b0;
   reg clk = 1'b0;
 
+  wire clk_9Mhz;
+  wire clk_locked;
+
   always #(ClockPeriod / 2) begin
     clk = ~clk;
   end
@@ -47,7 +50,7 @@ module tb_video;
 
     wait (vsync == 1'b0);
     #(20_000_000);
-    
+
     $finish;
   end
 

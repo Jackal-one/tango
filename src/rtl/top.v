@@ -4,6 +4,12 @@ module top (
     input  i_uart_rx,
     output o_uart_tx,
 
+    output o_video_clk,
+    output o_video_de,
+    output [4:0] o_video_r,
+    output [5:0] o_video_g,
+    output [4:0] o_video_b,
+
     output o_led_0,
     output o_led_1,
     output o_led_2,
@@ -26,6 +32,54 @@ module top (
 
   reg tx_enable;
   reg fifo_read_en;
+
+  wire clk_9Mhz;
+  wire clk_locked;
+  wire hsync;
+  wire vsync;
+  wire [9:0] sx;
+  wire [9:0] sy;
+
+  reg [23:0] video_data;
+
+  assign o_video_clk = clk_9Mhz;
+  assign o_video_r   = sx[8:4];
+  assign o_video_g   = sy[9:4];
+  assign o_video_b   = video_data[9:5];
+
+  always @(posedge clk_9Mhz or negedge i_rst_n) begin
+    if (~i_rst_n) begin
+      video_data <= 0;
+    end else if (~vsync) begin
+      video_data <= video_data + 1;
+    end
+  end
+
+  Gowin_rPLL rpll_inst (
+      .clkout(clk_9Mhz),
+      .lock  (clk_locked),
+      .reset (~i_rst_n),
+      .clkin (i_clk)
+  );
+
+  video_signal_gen #(
+      .HRes(480),
+      .VRes(272),
+      .HFrontPorch(2),
+      .HSyncPulse(41),
+      .HBackPorch(2),
+      .VFrontPorch(2),
+      .VSyncPulse(10),
+      .VBackPorch(2)
+  ) video_signal_gen_inst (
+      .clk(clk_9Mhz),
+      .rstn(i_rst_n),
+      .hsync(hsync),
+      .vsync(vsync),
+      .de(o_video_de),
+      .sx(sx),
+      .sy(sy)
+  );
 
   uart_rx #(
       .ClkFreq (ClkFreq),
