@@ -10,9 +10,9 @@ module video_signal_gen #(
 ) (
     input wire clk,
     input wire rstn,
-    output reg hsync,
-    output reg vsync,
-    output reg de,
+    output wire hsync,
+    output wire vsync,
+    output wire de,
     output reg [9:0] sx,
     output reg [9:0] sy
 );
