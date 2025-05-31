@@ -21,7 +21,7 @@ module fifo_async #(
   localparam AW = $clog2(Depth);
   localparam DW = Width;
 
-  reg [DW-1:0] mem [0:Depth-1];
+  reg [DW-1:0] mem[0:Depth-1];
 
   reg [AW:0] write_ptr, read_ptr;
   wire [AW-1:0] write_addr = write_ptr[AW-1:0];
@@ -97,7 +97,7 @@ module fifo_async #(
 
   always @(posedge i_rd_clk or negedge i_rd_rstn) begin
     if (~i_rd_rstn) begin
-      o_empty <= 1'b0;
+      o_empty <= 1'b1;
     end else begin
       o_empty <= (write_ptr_gray_sync2 == read_ptr_gray);
     end
